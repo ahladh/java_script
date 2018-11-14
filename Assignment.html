@@ -1,0 +1,35 @@
+<html>
+<head>
+<title>Test</title>
+</head>
+<body>
+Enter The Task To be Added : <input type="text" id="AddEle">
+<h2>ToDo List</h2>
+<p id="do"></p>
+<h2>Done List</h2>
+
+<script>
+var ToDo= []
+document.getElementById("AddEle").addEventListener("change", addElement);
+var text = "<ul>";
+function addElement() {
+    var element = document.getElementById("AddEle");
+
+	ToDo.push( element.value );
+    ToDo.forEach(DisplayArray);
+	document.getElementById("AddEle").value='';
+    document.getElementById("do").innerHTML = text;
+    text = ''
+}
+
+function DisplayArray(value) {
+	
+	text += "<li>" + value + "</li>";
+}
+text += "</ul>"
+
+
+</script>
+
+</body>
+</html>
