@@ -1,32 +1,139 @@
 <html>
 <head>
 <title>Test</title>
+<style>
+li {
+      list-style-type: none;
+}
+</style>
 </head>
 <body>
 Enter The Task To be Added : <input type="text" id="AddEle">
 <h2>ToDo List</h2>
-<p id="do"></p>
-<h2>Done List</h2>
+
+<h4 id="do"></h4>
+<h2 >Done List</h2>
+ <button type="button" id="clear">Clear Completed Task</button>
+<h4 id="done"></h4>
+
+
+<p id="toDoPercent"></p>
+<p id="donePercent"></p>
 
 <script>
-var ToDo= []
+function percentage(){
+	var total = ToDo.length + doneList.length;
+	document.getElementById("toDoPercent").innerHTML="Percentage ToDo:" + ((ToDo.length / total) * 100).toFixed(2) + "%";
+	document.getElementById("donePercent").innerHTML="Percentage Done:" + ((doneList.length / total) * 100).toFixed(2) + "%";
+}
+
+var ToDo = [];
+var doneList = [];    
 document.getElementById("AddEle").addEventListener("change", addElement);
-var text = "<ul>";
+document.getElementById("clear").addEventListener("click", clearCompleted);
+//document.getElementById("outer").addEventListener("change", MoveElement);
+
+function clearCompleted(){
+	if ( doneList.length > 0)
+	{
+	window.alert("All Completed Task Will Be Cleared");
+	doneList = [];
+	document.getElementById("done").innerHTML="";
+	percentage();
+	}
+	else
+	{
+		window.alert("No Current Completed Task Present");
+	}
+}
+
 function addElement() {
-    var element = document.getElementById("AddEle");
-
-	ToDo.push( element.value );
-    ToDo.forEach(DisplayArray);
-	document.getElementById("AddEle").value='';
-    document.getElementById("do").innerHTML = text;
-    text = ''
-}
-
-function DisplayArray(value) {
+    text ="<ul>";
 	
-	text += "<li>" + value + "</li>";
+	var i = 0;
+    var element = document.getElementById("AddEle");
+    
+
+	ToDo.push({ 
+	             status : "In Progress",
+                 taskName : element.value            
+		   });
+    //console.log(task);
+	ToDo.forEach(DisplayArray);
+	document.getElementById("AddEle").value='';
+	text += "</ul>"
+	
+
+    document.getElementById("do").innerHTML = text;
+	console.log(text);
+
+   
+	
+	
+  function DisplayArray(value) {
+
+	 
+	text += "<li><input type=\"checkbox\" id=\"MoveItem" + i +"\" name=" +i    + " value=\""+ value.taskName + "\" "+ " >" + value.taskName + "</li>";
+	i++;
+    
+ }
+	callMoveElement(ToDo.length);
+	percentage();
 }
-text += "</ul>"
+
+function MoveElement() {
+  
+      textDone ="<ul>";
+	console.log(this.value);
+	console.log(ToDo[this.name].status)
+	ToDo[this.name].status="Done";
+	console.log(this.value);
+	console.log(ToDo[this.name].status)
+	
+	doneList.push({ 
+	            status : ToDo[this.name].status,
+           taskName : ToDo[this.name].taskName           
+		   });
+		   ToDo.splice(this.name,1);
+		   
+		   doneList.forEach(DisplayArray);
+		   textDone += "</ul>"
+		   document.getElementById("done").innerHTML=textDone;
+		    function DisplayArray(value) {
+               textDone += "<li>" + value.taskName + "</li>";
+ }
+   		
+		DisplayAgain();
+		percentage();
+}
+
+function DisplayAgain(){
+     text ="<ul>";
+	 var i = 0;
+	ToDo.forEach(DisplayArray);
+	text += "</ul>"
+	document.getElementById("do").innerHTML = text;
+	function DisplayArray(value) {
+
+	 
+	text += "<li><input type=\"checkbox\" id=\"MoveItem" + i +"\" name=" +i    + " value=\""+ value.taskName + "\" "+ " >" + value.taskName + "</li>";
+	i++;
+    
+ }
+ callMoveElement(ToDo.length);
+	
+}
+
+
+function callMoveElement(val) {
+    
+
+    for (var j = 0; j < val; j++) { 
+   document.getElementById("MoveItem"+j).addEventListener("change", MoveElement);
+}
+	
+
+}
 
 
 </script>
